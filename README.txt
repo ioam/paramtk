@@ -8,8 +8,9 @@ examples.
 Installation
 ============
 
-ParamTk depends on Param (http://ioam.github.com/param/) and Tkinter
-(usually included as standard with Python).
+ParamTk depends on Param (http://ioam.github.com/param/), PIL
+(http://www.pythonware.com/products/pil/), and Tkinter (usually
+included as standard with Python).
 
 Official releases of ParamTk are available at
 http://pypi.python.org/pypi/paramtk, and can be installed via ``pip

@@ -9,7 +9,8 @@ setup_args = {}
 #############################################################################################
 ##### CEBALERT: copied from topographica; should be simplified
 
-required = {'param':">=0.0.1"}
+required = {'param':">=0.0.1",
+            'PIL':">=1.1.6"}
 
 packages_to_install = [required]
 packages_to_state = [required]
