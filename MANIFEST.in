@@ -1,0 +1,4 @@
+include README.txt
+include LICENSE.txt
+include setup.py
+recursive-include paramtk/tcl *.tcl
