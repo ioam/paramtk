@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Paramtk : Tk interface for Param" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Paramtk</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ioam/paramtk">View on GitHub</a>
+
+          <h1 id="project_title">Paramtk</h1>
+          <h2 id="project_tagline">Tk interface for Param</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ioam/paramtk/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ioam/paramtk/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>ParamTk is an optional Tkinter interface to Param, allowing easy construction of GUIs from existing objects.</p>
+
+<p>Starting with an existing parameterized object (<a href="http://ioam.github.com/param/):">http://ioam.github.com/param/):</a></p>
+
+<div class="highlight">
+<pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">param</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">Parameterized</span><span class="p">):</span>
+<span class="o">...</span>    <span class="n">a</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">doc</span><span class="o">=</span><span class="s">"Probability that..."</span><span class="p">)</span>
+<span class="o">...</span>    <span class="n">b</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">Boolean</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="s">"Whether to..."</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+</pre>
+</div>
+
+
+<p>If we start ParamTk and create a Tkinter window:</p>
+
+<div class="highlight">
+<pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">Tkinter</span><span class="o">,</span> <span class="nn">paramtk</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">paramtk</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">window</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Toplevel</span><span class="p">()</span>
+</pre>
+</div>
+
+
+<p>We can create a simple property sheet, allowing immediate editing of the instance's parameters:</p>
+
+<div class="highlight">
+<pre><span class="o">&gt;&gt;&gt;</span> <span class="n">paramtk</span><span class="o">.</span><span class="n">ParametersFrame</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+</pre>
+</div>
+
+
+<p><img src="http://dl.dropbox.com/u/79845182/paramtk/a1.png" alt="propertysheet"><img src="http://dl.dropbox.com/u/79845182/paramtk/a2.png" alt="tooltip"></p>
+
+<p>The original declaration of each parameter is automatically transformed to create a sensible GUI element (e.g. a numeric parameter with bounds is represented by a slider, while a boolean parameter is represented by a checkbox). The underlying object is automatically updated without the need for additional code. </p>
+
+<p>Apart from creating a property sheet for a single object, ParamTk can also be used to display individual parameters from multiple objects in specific positions, allowing for the creation of flexible GUIs. </p>
+
+<p>Note: While ParamTk is being used successfully, it was originally written as proof of concept and thus could be simplified considerably. Additionally, creating new interfaces to Param in alternative GUI toolkits should be straightforward. If you are interested, please contact us.</p>
+
+<h2>Installation</h2>
+
+<p>ParamTk depends on Tkinter (usually included as standard with Python), PIL with its Tk interface (<a href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a>), and Param (<a href="http://ioam.github.com/param/">http://ioam.github.com/param/</a>).</p>
+
+<p>Official releases of ParamTk are available at <a href="http://pypi.python.org/pypi/paramtk">http://pypi.python.org/pypi/paramtk</a>, and can be installed along with dependencies via <code>pip install paramtk</code> or <code>easy_install paramtk</code>.</p>
+
+<p>Alternatively, after seperately installing the dependencies, ParamTk can be installed via <code>python setup.py install</code>.</p>
+
+<h2>Support</h2>
+
+<p>Questions and comments are welcome at <a href="https://github.com/ioam/paramtk/issues">https://github.com/ioam/paramtk/issues</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Paramtk maintained by <a href="https://github.com/ioam">ioam</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
