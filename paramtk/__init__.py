@@ -169,12 +169,18 @@ $Id$
 ## version = popen('svnversion -n').read()
 ## logging.info("tkgui logging started for %s"%version)
 
+
 import __main__
 import copy
 import decimal
 import os.path
-import ImageTk, Image, ImageOps
+
 import Tkinter as T
+
+try:
+    import Image, ImageOps, ImageTk 
+except ImportError:
+    from PIL import Image, ImageOps, ImageTk
 
 
 from inspect import getdoc
