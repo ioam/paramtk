@@ -36,7 +36,7 @@ for package_list in packages_to_state:
 
 setup_args.update(dict(
     name='paramtk',
-    version='0.02',
+    version='0.8',
     description='Optional Tkinter interface for Param',
     long_description=open('README.txt').read(),
     author= "IOAM",
