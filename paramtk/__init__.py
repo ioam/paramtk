@@ -35,7 +35,7 @@ Examples
 (1) Display the parameters of an object inside an existing window
 
 You want to display all parameters of a parameterized instance
-inside an existing containter (e.g. a window or a frame):
+inside an existing container (e.g. a window or a frame):
 
   # existing Parameterized instance g
   from topo import pattern
@@ -1173,6 +1173,7 @@ class TkParameterized(TkParameterizedBase):
 
         # CEBALER: doc
         self.allow_dynamic = []
+        self.allow_default = []
 
         self.param_immediately_apply_change = {Boolean:True,
                                                Selector:True,
@@ -1208,10 +1209,13 @@ class TkParameterized(TkParameterizedBase):
         # (i.e. parameterize them)
         self.popup_menu = Menu(master, tearoff=0)
         self.dynamic_var = T.BooleanVar()
+        self.default_var = T.BooleanVar()
         self.popup_menu.add("checkbutton",indexname="dynamic",
                             label="Enter dynamic value?",
                             state="disabled",command=self._switch_dynamic,
                             variable=self.dynamic_var)
+        self.popup_menu.add("command",label="Reset to default",
+                            command=self._default_param)
 
 
         ### Right-click menu for widgets
@@ -1539,8 +1543,22 @@ class TkParameterized(TkParameterizedBase):
 
         self.repack_param(param_name)
 
+    def _default_param(self,name=None,default=False):
+        
+        parameter_name = name or self._right_click_param
+        param,po = self.get_parameter_object(parameter_name,with_source=True)
 
+        if parameter_name in self.allow_default:
+            self.allow_default.remove(parameter_name)
+        else:
+            self.allow_default.append(parameter_name)
 
+        assert isinstance(self._extraPO,Parameterized)
+        defaults = self._extraPO.defaults()
+
+        for param_name,val in defaults.items():
+            if (parameter_name == param_name):
+                self.gui_set_param(param_name,val)
 
 
 ################################################################################
@@ -2289,30 +2307,12 @@ class ParametersFrame(TkParameterized,T.Frame):
     def _defaults_button(self):
         """See Defaults parameter."""
         assert isinstance(self._extraPO,Parameterized)
-
         defaults = self._extraPO.defaults()
 
         for param_name,val in defaults.items():
             if not self.hidden_param(param_name):
-                self.gui_set_param(param_name,val)#_tkvars[param_name].set(val)
+                self.gui_set_param(param_name,val)
 
-                # CEBALERT: taggedsliders need to have tag_set() called to update slider
-                w = self.representations[param_name]['widget']
-                if hasattr(w,'tag_set'):w.tag_set()
-
-
-        # CEBALERT: why doesn't this first check that something has actually changed?
-        if self.on_modify:
-            self.on_modify()
-            
-        if self.on_set:
-            self.on_set()
-
-
-        
-        self.update_idletasks()
-
-        
         
     def _close_button(self):
         """See Close parameter."""
@@ -2642,22 +2642,6 @@ class ParametersFrameWithApply(ParametersFrame):
                 # CEBALERT: taggedsliders need to have tag_set() called to update slider
                 w = self.representations[name]['widget']
                 if hasattr(w,'tag_set'):w.tag_set()
-
-
-##     def _defaults_button(self):
-##         """See Defaults parameter."""
-##         assert isinstance(self._extraPO,Parameterized)
-
-##         defaults = self._extraPO.defaults()
-
-##         for param_name,val in defaults.items():
-##             if not self.hidden_param(param_name):
-##                 self._tkvars[param_name].set(val)
-
-##         if self.on_modify: self.on_modify()
-##         if self.on_set: self.on_set()
-##         self.update_idletasks()
-
 
 # CB: can override tracefn so that Apply/Refresh buttons are enabled/disabled as appropriate
 
