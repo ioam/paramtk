@@ -1556,9 +1556,10 @@ class TkParameterized(TkParameterizedBase):
         assert isinstance(self._extraPO,Parameterized)
         defaults = self._extraPO.defaults()
 
-        for param_name,val in defaults.items():
-            if (parameter_name == param_name):
-                self.gui_set_param(param_name,val)
+        self.gui_set_param(parameter_name,defaults[parameter_name])
+        w = self.representations[parameter_name]['widget']
+        if hasattr(w,'tag_set'):w.tag_set()
+        self.update_idletasks()
 
 
 ################################################################################
@@ -2312,6 +2313,15 @@ class ParametersFrame(TkParameterized,T.Frame):
         for param_name,val in defaults.items():
             if not self.hidden_param(param_name):
                 self.gui_set_param(param_name,val)
+                w = self.representations[param_name]['widget']
+                if hasattr(w,'tag_set'):w.tag_set()
+        if self.on_modify:
+            self.on_modify()
+
+        if self.on_set:
+            self.on_set()
+
+        self.update_idletasks()
 
         
     def _close_button(self):
