@@ -1559,7 +1559,6 @@ class TkParameterized(TkParameterizedBase):
         self.gui_set_param(parameter_name,defaults[parameter_name])
         w = self.representations[parameter_name]['widget']
         if hasattr(w,'tag_set'):w.tag_set()
-        self.update_idletasks()
 
 
 ################################################################################
@@ -2313,10 +2312,15 @@ class ParametersFrame(TkParameterized,T.Frame):
         for param_name,val in defaults.items():
             if not self.hidden_param(param_name):
                 self.gui_set_param(param_name,val)
+                # tag_set() must be called in order to visually update the slider
                 w = self.representations[param_name]['widget']
                 if hasattr(w,'tag_set'):w.tag_set()
+
+
+        # CEBALERT: why doesn't this first check that something has actually changed?
         if self.on_modify:
             self.on_modify()
+
 
         if self.on_set:
             self.on_set()
