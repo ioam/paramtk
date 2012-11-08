@@ -1,6 +1,7 @@
 ## ParamTk
 
-ParamTk is an optional Tkinter interface to Param, allowing easy
+ParamTk is an optional Tkinter interface to 
+[Param](http://ioam.github.com/param/), allowing easy
 construction of GUIs from existing code.
 
 Please see [ParamTk's website](http://ioam.github.com/paramtk/) for documentation and
