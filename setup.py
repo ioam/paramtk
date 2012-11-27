@@ -38,7 +38,7 @@ setup_args.update(dict(
     name='paramtk',
     version='0.8',
     description='Optional Tkinter interface for Param',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     author= "IOAM",
     author_email= "developers@topographica.org",
     maintainer= "IOAM",
