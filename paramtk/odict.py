@@ -818,7 +818,7 @@ class OrderedDict(dict):
         1
         >>> d.index(4)
         Traceback (most recent call last):
-			...
+            ...
         ValueError: 4 is not in list
         """
         return self._sequence.index(key)
@@ -1329,7 +1329,7 @@ class SequenceOrderedDict(OrderedDict):
     1
     >>> d.items.index((2, 1))
     Traceback (most recent call last):
-		...
+        ...
     ValueError: (2, 1) is not in list
     >>> d.items.reverse()
     >>> d.items
