@@ -137,9 +137,6 @@ representing those of an external parameterized instance or class).
   t = Tkinter.Toplevel()
   x = X()
   XPanel(t,x)
-
-
-$Id$
 """
 
 # CEBALERT: moving todo
