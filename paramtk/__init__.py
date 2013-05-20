@@ -1726,8 +1726,6 @@ class TkParameterized(TkParameterizedBase):
 
         tkvar.set(current_value)
 
-        print new_range, widget_options
-
         return new_range,widget_options
 
 
