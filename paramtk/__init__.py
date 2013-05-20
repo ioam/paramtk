@@ -40,16 +40,16 @@ inside an existing container (e.g. a window or a frame):
   # existing Parameterized instance g
   from topo import pattern
   g = pattern.Gaussian()
-  
+
   # existing window t
   import Tkinter
   t = Tkinter.Toplevel()
-  
+
   # display all the parameters of g in t
   from topo.param.tk import ParametersFrame
   ParametersFrame(t,g)
   #should be ParametersFrame(t,g).pack(); see ALERT in ParametersFrame
-  
+
 
 (2) Display the parameters of an object in a standalone window
 
@@ -58,11 +58,11 @@ You want a new window displaying only the parameters of your object:
   # existing Parameterized instance g
   from topo import pattern
   g = pattern.Gaussian()
-  
+
   # display all the parameters of g in a new window
   from topo.param.tk import edit_parameters
   edit_parameters(g)
-  
+
 
 (3) Flexible GUI layout using TkParameterized
 
@@ -107,20 +107,20 @@ representing those of an external parameterized instance or class).
 
   ## Existing class
   from topo import params
-  
+
   class X(param.Parameterized):
       one = param.Boolean(True)
       two = param.Boolean(True)
-  
-                                                      
-  ## Panel to represent an instance of X 
+
+
+  ## Panel to represent an instance of X
   from Tkinter import Frame
   from topo.param.tk import TkParameterized
 
   class XPanel(TkParameterized,Frame):
-  
+
       dock = param.Boolean(False,doc='Whether to attach this Panel')
-      
+
       def __init__(self,master,x):
           self.pack_param('dock',side='top',on_set=self.handle_dock)
           self.pack_param('one',side='left')
@@ -130,8 +130,8 @@ representing those of an external parameterized instance or class).
           if self.dock:
               # dock the window
           else:
-              # undock the window        
-  
+              # undock the window
+
 
   ## Running the code
   t = Tkinter.Toplevel()
@@ -175,7 +175,7 @@ import os.path
 import Tkinter as T
 
 try:
-    import Image, ImageOps, ImageTk 
+    import Image, ImageOps, ImageTk
 except ImportError:
     from PIL import Image, ImageOps, ImageTk
 
@@ -246,7 +246,7 @@ def initialize():
 def inverse(dict_):
     """
     Return the inverse of dictionary dict_.
-    
+
     (I.e. return a dictionary with keys that are the values of dict_,
     and values that are the corresponding keys from dict_.)
 
@@ -269,7 +269,7 @@ def lookup_by_class(dict_,class_):
     v = None
     for c in classlist(class_)[::-1]:
         if c in dict_:
-            v = dict_[c] 
+            v = dict_[c]
             break
     return v
 
@@ -311,16 +311,16 @@ def keys_sorted_by_value_unique_None_safe(d, **sort_kwargs):
         None_in_d = True
     else:
         None_in_d = False
-        
+
     if None_in_d:
         del d['None']
-        
+
     sorted_keys = keys_sorted_by_value_unique(d,**sort_kwargs)
 
     if None_in_d:
         d['None']=None
         sorted_keys.append('None')
-        
+
     return sorted_keys
 
 
@@ -341,7 +341,7 @@ def is_button(widget):
 # Very basic wrapper for scrodget
 class ScrodgetWidget:
     def _require(self, master):
-        master.tk.call("package", "require", "scrodget") 
+        master.tk.call("package", "require", "scrodget")
 
     def __init__(self, master, cnf={}, **kw):
         self._require(master)
@@ -421,7 +421,7 @@ class Button(Callable):
 
 
 
-            
+
 # Note that TkParameterized extends TkParameterizedBase by adding
 # widget-drawing abilities; documentation for using these classes
 # begins at a more useful and simple level in TkParameterized (the
@@ -436,7 +436,7 @@ class TkParameterizedBase(Parameterized):
     Parameterized (extraPO). The Parameters of the extra
     shadowed PO are available via this object (via both the usual
     'dot' attribute access and dedicated parameter accessors
-    declared in this class). 
+    declared in this class).
 
     The Tkinter.Variable shadows for this Parameterized and any
     extra shadowed one are available under their corresponding
@@ -455,7 +455,7 @@ class TkParameterizedBase(Parameterized):
 
     Notes
     =====
-    
+
     (1) (a) There is an order of precedance for parameter lookup:
         this PO > shadowed PO.
 
@@ -485,7 +485,7 @@ class TkParameterizedBase(Parameterized):
         parameter accessors .get_parameter_object('size') or
         .get_parameter_value('size') (and the equivalent set versions)
         avoids this problem.
-        
+
 
 
     (2) If a shadowed PO's Parameter value is modified elsewhere, the
@@ -530,7 +530,7 @@ class TkParameterizedBase(Parameterized):
     _extraPO = None
 
     # CEBALERT: Parameterized repr method leads to recursion error.
-    def __repr__(self): return object.__repr__(self)    
+    def __repr__(self): return object.__repr__(self)
 
 
     def _setup_params(self,**params):
@@ -568,7 +568,7 @@ class TkParameterizedBase(Parameterized):
         --------------------
 
         * _extraPO
-        
+
 
         * self_first
         Determines precedence order for Parameter lookup:
@@ -577,7 +577,7 @@ class TkParameterizedBase(Parameterized):
         priority.
 
 
-        
+
 
         * obj2str_fn & str2obj_fn
 
@@ -592,7 +592,7 @@ class TkParameterizedBase(Parameterized):
 
         * _tkvars
 
-        
+
         """
         if not (extraPO is None or isinstance(extraPO,ParameterizedMetaclass) \
                 or isinstance(extraPO,Parameterized)):
@@ -610,7 +610,7 @@ class TkParameterizedBase(Parameterized):
         self._param_to_tkvar = {Boolean:T.BooleanVar,
                                 Parameter:T.StringVar}
 
-        # CEBALERT: Parameter is the base parameter class, but ... 
+        # CEBALERT: Parameter is the base parameter class, but ...
         # at least need a test that will fail when a new param type added
         # Rename
         self.trans={Parameter:Eval_ReprTranslator,
@@ -622,7 +622,7 @@ class TkParameterizedBase(Parameterized):
                     String:DoNothingTranslator,
                     List:ListTranslator,
                     HookList:ListTranslator} # CBALERT: sort out inherit.
-        
+
         self.change_PO(extraPO)
         super(TkParameterizedBase,self).__init__(**params)
 
@@ -642,16 +642,16 @@ class TkParameterizedBase(Parameterized):
 
     def _init_tkvars(self,PO):
         """
-        Create Tkinter Variable shadows of all Parameters of PO.        
+        Create Tkinter Variable shadows of all Parameters of PO.
         """
         for name,param in PO.params().items():
             self._create_tkvar(PO,name,param)
-            
+
 
     def _create_tkvar(self,PO,name,param_obj):
         """
         Add _tkvars[name] to represent the parameter object with the specified name.
-        
+
         The appropriate Variable is used for each Parameter type.
 
         Also adds tracing mechanism to keep the Variable and Parameter
@@ -675,7 +675,7 @@ class TkParameterizedBase(Parameterized):
         # CB: Instead of a trace, could we override the Variable's
         # set() method i.e. trace it ourselves?  Or does too much
         # happen in tcl/tk for that to work?
-        
+
         # Override the Variable's get() method to guarantee an
         # out-of-date value is never returned.  In cases where the
         # tkinter val is the most recently changed (i.e. when it's
@@ -688,7 +688,7 @@ class TkParameterizedBase(Parameterized):
 
 
 ################################################################################
-# 
+#
 ################################################################################
 
     def _handle_gui_set(self,p_name):
@@ -709,24 +709,24 @@ class TkParameterizedBase(Parameterized):
         tkvar._original_set(val) # trace not called because we're already in trace,
                                   # and tk disables trace activation during trace
 
-    
+
     # CB: separate into update and get?
     def _tkvar_get(self,param_name):
         """
         Return the value of the tk variable representing param_name.
-        
+
         (Before returning the variable's value, ensures it's up to date.)
         """
-        tk_val = self._tkvars[param_name]._original_get() 
+        tk_val = self._tkvars[param_name]._original_get()
         po_val = self.get_parameter_value(param_name)
 
         po_stringrep = self._object2string(param_name,po_val)
 
         if not self.translators[param_name].last_string2object_failed and not tk_val==po_stringrep:
             self._tkvars[param_name]._original_set(po_stringrep)
-        return tk_val         
+        return tk_val
 
-        
+
     def _tkvar_changed(self,name):
         """
         Return True if the displayed value does not equal the object's
@@ -771,7 +771,7 @@ class TkParameterizedBase(Parameterized):
         (Called by the Tkinter Variable's trace_variable() method.)
         """
         self.debug("TkPOb._update_param_from_tkvar(%s)"%param_name)
-        
+
         parameter,sourcePO=self.get_parameter_object(param_name,with_source=True)
 
         ### can only edit constant parameters for class objects
@@ -779,24 +779,24 @@ class TkParameterizedBase(Parameterized):
             return  ### HIDDEN
 
         tkvar = self._tkvars[param_name]
-        
+
         if self._tkvar_changed(param_name):
             # don't attempt to set if there was a string-to-object translation error
             if self.translators[param_name].last_string2object_failed:
-                return   ### HIDDEN 
+                return   ### HIDDEN
 
             # (use _original_get() because we don't want the tkvar to be reset to
             # the parameter's current value!)
             val = self._string2object(param_name,tkvar._original_get())
 
-            try: 
+            try:
                 self._set_parameter(param_name,val)
             except: # everything
                 tkvar.set(tkvar._last_good_val)
                 raise # whatever the parameter-setting error was
 
             self.debug("set %s to %s"%(param_name,val))
-                
+
             if hasattr(tkvar,'_on_modify'):
                 tkvar._on_modify()
 
@@ -817,7 +817,7 @@ class TkParameterizedBase(Parameterized):
 
 
 ################################################################################
-# 
+#
 ################################################################################
 
 
@@ -826,7 +826,7 @@ class TkParameterizedBase(Parameterized):
         """
         Return a list of Parameterizeds in which to find
         Parameters.
-        
+
         The list is ordered by precedence, as defined by self_first.
         """
         if not self._extraPO:
@@ -853,7 +853,7 @@ class TkParameterizedBase(Parameterized):
 
         raise AttributeError(self._attr_err_msg(name,sources))
 
-        
+
     def get_parameter_object(self,name,parameterized_object=None,with_source=False):
         """
         Return the Parameter *object* (not value) specified by name,
@@ -884,7 +884,7 @@ class TkParameterizedBase(Parameterized):
         Otherwise, looks in the source_POs of this object.
         """
         source = parameterized_object or self.get_source_po(name)
-        return source.get_value_generator(name) 
+        return source.get_value_generator(name)
 
     # CEBALERT: shouldn't this use __set_parameter? Presumably doing
     # that kind of thing is part of the cleanup required in this file.
@@ -906,12 +906,12 @@ class TkParameterizedBase(Parameterized):
 
 ########## these lookup attributes in order ##########
 # (i.e. you could get attribute of self rather than a parameter)
-# (might remove these to save confusion: they are useful except when 
+# (might remove these to save confusion: they are useful except when
 #  someone would be surprised to get an attribute of e.g. a Frame (like 'size') when
 #  they were expecting to get one of their parameters. Also, means you can't set
 #  an attribute a on self if a exists on one of the shadowed objects)
 # (also they (have to) ignore self_first)
-    
+
     def __getattribute__(self,name):
         """
         If the attribute is found on this object, return it. Otherwise,
@@ -927,9 +927,9 @@ class TkParameterizedBase(Parameterized):
                 return getattr(extraPO,name) # HIDDEN!
 
             _attr_err_msg = object.__getattribute__(self,'_attr_err_msg')
-                
+
             raise AttributeError(_attr_err_msg(name,[self,extraPO]))
-                    
+
 
     def __setattr__(self,name,val):
         """
@@ -939,12 +939,12 @@ class TkParameterizedBase(Parameterized):
         """
         # use dir() not hasattr() because hasattr uses __getattribute__
         if name in dir(self):
-            
+
             if name in self.params():
                 self.set_parameter_value(name,val,self)
             else:
                 object.__setattr__(self,name,val)
-                
+
         elif name in dir(self._extraPO):
 
             if name in self._extraPO.params():
@@ -955,7 +955,7 @@ class TkParameterizedBase(Parameterized):
         else:
 
             # name not found, so set on this object
-            object.__setattr__(self,name,val)   
+            object.__setattr__(self,name,val)
 #######################################################
 
 
@@ -963,24 +963,24 @@ class TkParameterizedBase(Parameterized):
 
 
 
-    
+
 
 ######################################################################
 # Translation between GUI (strings) and true values
 
     def _create_translator(self,name,param):
         self.debug("_create_translator(%s,%s)"%(name,param))
-        
+
         translator_type = lookup_by_class(self.trans,type(param))
 
-        # Dynamic parameters only *might* contain a 
+        # Dynamic parameters only *might* contain a
         # dynamic value; if such a parameter really is dynamic, we
         # overwrite any more specific class found above
         # (e.g. a Number with a dynamic value will have a numeric
         # translator from above, so we replace that)
         if param_is_dynamically_generated(param,self.get_source_po(name)) or name in self.allow_dynamic:
             translator_type = self.trans[Dynamic]
-            
+
         self.translators[name]=translator_type(param,initial_value=self.get_parameter_value(name))
 
         self.translators[name].msg_handler = self.msg_handler
@@ -999,14 +999,14 @@ class TkParameterizedBase(Parameterized):
 
         if not replace:
             translator=copy.copy(translator)
-            
+
         return translator.object2string(obj)
 
 
     def _string2object(self,param_name,string):
         """
         Change the given string for the named parameter into an object.
-        
+
         If there is a translator for param_name, translate the string
         to the object; otherwise, call convert_string2obj on the
         string.
@@ -1029,7 +1029,7 @@ class TkParameterizedBase(Parameterized):
 
         for o in objects:
             error_string+=" or %s"%o
-            
+
         return error_string
 
 
@@ -1054,7 +1054,7 @@ class TkParameterizedBase(Parameterized):
             parameter.set_in_bounds(sourcePO,val)
         else:
             setattr(sourcePO,param_name,val)
-                        
+
 
 
 
@@ -1076,7 +1076,7 @@ class TkParameterized(TkParameterizedBase):
     TkParameterizedBase's documentation for more details).
 
     In general, pack_param() adds a Tkinter.Frame containing a label
-    and a widget: 
+    and a widget:
 
     ---------------------                     The Parameter's
     |                   |                     'representation'
@@ -1114,7 +1114,7 @@ class TkParameterized(TkParameterizedBase):
 
         Example use:
           TkParameterized.pretty_parameters=False
-    
+
         (This causes all Parameters throughout the GUI to be displayed
         with variable names.)
         """)
@@ -1125,7 +1125,7 @@ class TkParameterized(TkParameterizedBase):
         """
         Initialize this object with the arguments and attributes
         described below:
-        
+
         extraPO: optional Parameterized object for which to shadow
         Parameters (in addition to Parameters of this object; see
         superclass)
@@ -1137,7 +1137,7 @@ class TkParameterized(TkParameterizedBase):
 
         Important attributes
         ====================
-        
+
         * param_immediately_apply_change
 
         Some types of Parameter are represented with widgets where
@@ -1198,9 +1198,9 @@ class TkParameterized(TkParameterizedBase):
             HookList:self._create_list_widget,
             Filename:self._create_fileselector_widget,
             }
-        
-        self.representations = {}  
-        
+
+        self.representations = {}
+
 
         # CEBNOTE: it would be nice to sort out menus properly
         # (i.e. parameterize them)
@@ -1216,7 +1216,7 @@ class TkParameterized(TkParameterizedBase):
 
 
         ### Right-click menu for widgets
-        master.option_add("*Menu.tearOff", "0") 
+        master.option_add("*Menu.tearOff", "0")
         self.menu = Menu(master)
         self.menu.insert_command('end',label='Properties',
             command=lambda:self._edit_PO_in_currently_selected_widget())
@@ -1237,9 +1237,9 @@ class TkParameterized(TkParameterizedBase):
                 param_name=name
                 break
         # CEBALERT: should have used get_parameter_value(param_name)?
-        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get()) 
+        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get())
         ###
-        
+
         if hasattr(PO_to_edit,'params'):
             self.menu.tk_popup(event.x_root, event.y_root)
 
@@ -1258,7 +1258,7 @@ class TkParameterized(TkParameterizedBase):
                 break
 
         # CEBALERT: should have used get_parameter_value(param_name)?
-        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get()) 
+        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get())
 
         parameter_window = AppWindow(self)
         parameter_window.title(PO_to_edit.name+' parameters')
@@ -1269,7 +1269,7 @@ class TkParameterized(TkParameterizedBase):
         self.balloon.bind(title,getdoc(self.get_parameter_object(param_name)))
         ############################
 
-        # uh-oh 
+        # uh-oh
         if not isinstance(self,ParametersFrame):
             p_type = ParametersFrameWithApply
             parameter_frame = p_type(parameter_window,parameterized_object=PO_to_edit,msg_handler=self.msg_handler)
@@ -1294,8 +1294,8 @@ class TkParameterized(TkParameterizedBase):
             state = "disabled"
         self.popup_menu.entryconfig("dynamic",state=state)
         self.dynamic_var.set(currently_dynamic or \
-                             param_name in self.allow_dynamic) 
-        
+                             param_name in self.allow_dynamic)
+
 
     def _param_right_click(self,event,param_name):
         """Display a popup menu when user right clicks on a parameter."""
@@ -1305,14 +1305,14 @@ class TkParameterized(TkParameterizedBase):
 
 
 ################################################################################
-# 
+#
 ################################################################################
- 
+
     def _update_param_from_tkvar(self,param_name,force=False):
         """
         Prevents the superclass's _update_param_from_tkvar() method from being
         called unless:
-        
+
         * param_name is a Parameter type that has changes immediately
           applied (see doc for param_immediately_apply_change
           dictionary);
@@ -1325,9 +1325,9 @@ class TkParameterized(TkParameterizedBase):
         a text box, this method is called with force=True.)
         """
         self.debug("TkPO._update_param_from_tkvar(%s)"%param_name)
-        
+
         param_obj = self.get_parameter_object(param_name)
-        
+
         if not lookup_by_class(self.param_immediately_apply_change,
                                type(param_obj)) and not force:
             return
@@ -1358,7 +1358,7 @@ class TkParameterized(TkParameterizedBase):
 
 
 ################################################################################
-# End 
+# End
 ################################################################################
 
 
@@ -1408,14 +1408,14 @@ class TkParameterized(TkParameterizedBase):
 
         * on_modify is an optional function to call whenever the
         corresponding Tkinter Variable is actually changed.
-        
+
 
         widget_options specified here override anything that might have been
         set elsewhere (e.g. Button's size can be overridden here
         if required).
 
 
-        
+
         Examples of use:
         pack_param(name)
         pack_param(name,side='left')
@@ -1431,14 +1431,14 @@ class TkParameterized(TkParameterizedBase):
             widget_side='left'; label_side='right'
         else:
             label_side='left'; widget_side='right'
-            
+
         if label: label.pack(side=label_side) # label can be None (e.g. for Button)
         widget.pack(side=widget_side,expand='yes',fill='x')
 
         representation = {"frame":frame,"widget":widget,
                           "label":label,"pack_options":pack_options,
                           "on_set":on_set,"on_modify":on_modify,
-                          "widget_options":widget_options}                       
+                          "widget_options":widget_options}
         self.representations[name] = representation
 
         # If there's a label, balloon's bound to it - otherwise, bound
@@ -1454,9 +1454,9 @@ class TkParameterized(TkParameterizedBase):
             # some params appear to have no docs!!!
             if help_text is not None:
                 help_text+="\n\nDefault: %s"%self._object2string(name,param_obj.default,replace=False)
-        
+
         self.balloon.bind(label or frame,help_text)
-        
+
         frame.pack(pack_options)
 
         self._indicate_tkvar_status(name)
@@ -1476,7 +1476,7 @@ class TkParameterized(TkParameterizedBase):
         #self.representations[name]['label'].pack_forget()
         #self.representations[name]['widget'].pack_forget()
         # unhide_param would need modifying too
-        
+
 
     def unhide_param(self,name,new_pack_options={}):
         """
@@ -1517,12 +1517,12 @@ class TkParameterized(TkParameterizedBase):
         o = self.representations[name]['pack_options']
         on_set = self.representations[name]['on_set']
         on_modify = self.representations[name]['on_modify']
-        
-        w.destroy(); l.destroy()        
+
+        w.destroy(); l.destroy()
 
         param_obj,PO = self.get_parameter_object(name,with_source=True)
         self._create_tkvar(PO,name,param_obj)
-        
+
         self.pack_param(name,f,on_set=on_set,on_modify=on_modify,**o)
 
 
@@ -1532,7 +1532,7 @@ class TkParameterized(TkParameterizedBase):
         param,po = self.get_parameter_object(param_name,with_source=True)
         if not hasattr(param,'_value_is_dynamic'):
             return
-        
+
         if param_name in self.allow_dynamic:
             self.allow_dynamic.remove(param_name)
         else:
@@ -1541,7 +1541,7 @@ class TkParameterized(TkParameterizedBase):
         self.repack_param(param_name)
 
     def _default_param(self,name=None,default=False):
-        
+
         parameter_name = name or self._right_click_param
         param,po = self.get_parameter_object(parameter_name,with_source=True)
 
@@ -1579,7 +1579,7 @@ class TkParameterized(TkParameterizedBase):
         methods for details to each type of widget.
         """
         # select the appropriate widget-creation method;
-        # default is self._create_string_widget... 
+        # default is self._create_string_widget...
         widget_creation_fn = self._create_string_widget
 
         param_obj,source_po = self.get_parameter_object(name,with_source=True)
@@ -1603,7 +1603,7 @@ class TkParameterized(TkParameterizedBase):
 
         # Is widget a button (but not a checkbutton)? If so, no label wanted.
         # CEBALERT 'notNonelabel': change to have a label with no text
-        if is_button(widget): 
+        if is_button(widget):
             label = None
         else:
             label = T.Label(master,text=self._pretty_print(name))
@@ -1612,12 +1612,12 @@ class TkParameterized(TkParameterizedBase):
         if param_obj.constant and isinstance(source_po,Parameterized):
             # (need to be able to set on class, hence check it's PO not POMetaclass
             widget.config(state='disabled')
-        
+
         widget.bind('<<right-click>>',lambda event: self._right_click(event, widget))
 
         return widget,label
 
-        
+
     def _create_button_widget(self,frame,name,widget_options):
         """
         Return a FocusTakingButton to represent Parameter 'name'.
@@ -1630,7 +1630,7 @@ class TkParameterized(TkParameterizedBase):
 
         If the Button was declared with an image, the button will
         have that image (and no text); otherwise, the button will display
-        the (possibly pretty_print()ed) name of the Parameter.        
+        the (possibly pretty_print()ed) name of the Parameter.
         """
         try:
             command = self._tkvars[name]._on_set
@@ -1659,7 +1659,7 @@ class TkParameterized(TkParameterizedBase):
             #button['relief']='flat'
         else:
             button['text']=self._pretty_print(name)
-            
+
 
         # and set size from Button
         #if size_param.size:
@@ -1697,7 +1697,7 @@ class TkParameterized(TkParameterizedBase):
         # and 'new_default' when calling pack_param(). Also, simplify it if
         # possible.
         self.translators[name].update()
-        
+
         new_range = self.translators[name].cache.keys()
 
         if 'sort_fn_args' not in widget_options:
@@ -1709,10 +1709,11 @@ class TkParameterized(TkParameterizedBase):
             if sort_fn_args is not None:
                 new_range = keys_sorted_by_value_unique_None_safe(self.translators[name].cache,**sort_fn_args)
 
-        assert len(new_range)>0 # CB: remove    
+        if len(new_range)<1:
+            new_range=[None]
 
         tkvar = self._tkvars[name]
-        
+
 
         if 'new_default' in widget_options:
             if widget_options['new_default']:
@@ -1724,8 +1725,11 @@ class TkParameterized(TkParameterizedBase):
                 current_value = new_range[0] # whatever was there is out of date now
 
         tkvar.set(current_value)
+
+        print new_range, widget_options
+
         return new_range,widget_options
-        
+
 
     def _create_selector_widget(self,frame,name,widget_options):
         """
@@ -1826,13 +1830,13 @@ class TkParameterized(TkParameterizedBase):
         w = ListWidget(frame,variable=self._tkvars[name],
                        cmd=X,**widget_options)
         #w = ListWidget(frame,variable=tkvar,**widget_options)
-        
-                    
+
+
         #help_text = getdoc(self._string2object(name,tkvar._original_get()))
         #self.balloon.bind(w,help_text)
         return w
 
-    
+
 
     def _create_number_widget(self,frame,name,widget_options):
         """
@@ -1844,10 +1848,10 @@ class TkParameterized(TkParameterizedBase):
         param = self.get_parameter_object(name)
 
         lower_bound,upper_bound = param.get_soft_bounds()
-        
+
         if upper_bound is not None and lower_bound is not None:
             # TaggedSlider needs BOTH bounds (neither can be None)
-            w.set_bounds(lower_bound,upper_bound,inclusive_bounds=param.inclusive_bounds) 
+            w.set_bounds(lower_bound,upper_bound,inclusive_bounds=param.inclusive_bounds)
 
 
         # have to do the lookup because subclass might override default
@@ -1855,7 +1859,7 @@ class TkParameterized(TkParameterizedBase):
             w.bind('<<TagReturn>>', lambda e=None,x=name: self._handle_gui_set(x,force=True))
             w.bind('<<TagFocusOut>>', lambda e=None,x=name: self._handle_gui_set(x,force=True))
             w.bind('<<SliderSet>>', lambda e=None,x=name: self._handle_gui_set(x,force=True))
-            
+
         return w
 
 
@@ -1865,7 +1869,7 @@ class TkParameterized(TkParameterizedBase):
         # could be cause of test pattern boolean not working?
         return T.Checkbutton(frame,variable=self._tkvars[name],**widget_options)
 
-        
+
     def _create_string_widget(self,frame,name,widget_options):
         """Return a Tkinter.Entry to represent parameter 'name'."""
         widget = T.Entry(frame,textvariable=self._tkvars[name],**widget_options)
@@ -1901,7 +1905,7 @@ class TkParameterized(TkParameterizedBase):
 
         if param_name in self.representations:
             if 'widget' in self.representations[param_name]:
-                
+
                 widget = self.representations[param_name]['widget']
                 states = {'error'   : 'red',
                           'changed' : 'blue',
@@ -1967,7 +1971,7 @@ class Translator(object):
     def __init__(self,param,initial_value=None):
         self.param = param
         self.msg_handler = None
-    
+
     def string2object(self,string_):
         raise NotImplementedError
 
@@ -2017,7 +2021,7 @@ class ListTranslator(Translator):
 
     def string2object(self,string_):
         return self.list_
-    
+
     def object2string(self,object_):
         self.list_=object_
         return script_repr(self.list_,[],"",[]).replace("\n","")
@@ -2030,14 +2034,14 @@ class Eval_ReprTranslator(Translator):
     commandline), and translates an object to a string by
     repr(object).
     """
-    
+
     last_object = None
     last_string = None
 
     def __init__(self,param,initial_value=None):
         super(Eval_ReprTranslator,self).__init__(param,initial_value)
         self.last_string = self.object2string(initial_value)
-        self.last_object = initial_value        
+        self.last_object = initial_value
 
     # the whole last_string deal is required because of execing in main
     def string2object(self,string_):
@@ -2085,19 +2089,19 @@ class String_ObjectTranslator(Translator):
 
     _cache = {}
     _cache_objects = {}
-    
+
     def __init__(self,param,initial_value=None):
         super(String_ObjectTranslator,self).__init__(param,initial_value)
         self._cache = {}
         self._cache_objects = {}
         self.update()
-        
+
     def string2object(self,string_):
         if string_ in self._cache:
             return self._cache_objects[self._cache[string_]]
         else:
             return string_
-        
+
     def object2string(self,object_):
         inverse_cache = inverse(self._cache)
         if id(object_) in inverse_cache:
@@ -2117,11 +2121,11 @@ class String_ObjectTranslator(Translator):
         n._cache = self._cache
         n._cache_objects = self._cache_objects
         return n
-    
-        
+
+
 
 class CSPTranslator(String_ObjectTranslator):
-        
+
     def string2object(self,string_):
         obj = super(CSPTranslator,self).string2object(string_)
         ## instantiate if it's just a class
@@ -2131,7 +2135,7 @@ class CSPTranslator(String_ObjectTranslator):
             self._cache_objects[id(obj)]=obj
 
         return obj
-        
+
     def object2string(self,object_):
         ## replace class if we already have object
         for name,objid in self._cache.items():
@@ -2174,7 +2178,7 @@ class ParametersFrame(TkParameterized,T.Frame):
     """
     Defaults = Button(doc="""Return values to class defaults.""")
 
-    Refresh = Button(doc="Return values to those currently set on the object (or, if editing a class, to those currently set on the class).")  
+    Refresh = Button(doc="Return values to those currently set on the object (or, if editing a class, to those currently set on the class).")
 
     # CEBALERT: this is a Frame, so close isn't likely to make
     # sense. But fortunately the close button acts on master.
@@ -2229,15 +2233,15 @@ class ParametersFrame(TkParameterized,T.Frame):
 
         # CEBALERT: just because callers assume this pack()s itself.
         # Really it should be left to callers i.e. this should be removed.
-        self.pack(expand='yes',fill='both') 
+        self.pack(expand='yes',fill='both')
 
 
     def hidden_param(self,name):
         """Return True if a parameter's precedence is below the display threshold."""
         # interpret a precedence of None as 0
-        precedence = self.get_parameter_object(name).precedence or 0 
+        precedence = self.get_parameter_object(name).precedence or 0
         return precedence<self.display_threshold
-        
+
 
     def _create_button_panel(self):
         """
@@ -2247,13 +2251,13 @@ class ParametersFrame(TkParameterized,T.Frame):
         #
         # Our button order (when all buttons present):
         # [Defaults] [Refresh] [Apply] [Close]
-        # 
+        #
         # Our button - Windows
         # Close(yes) - OK
         # Close(no ) - Cancel
         # [X]        - Cancel
         # Apply      - Apply
-        # Defaults   - 
+        # Defaults   -
         # Refresh    - Reset
         #
         # I think Windows users will head for the window's [X]
@@ -2269,7 +2273,7 @@ class ParametersFrame(TkParameterized,T.Frame):
         # http://developer.kde.org/documentation/standards/kde/style/dialogs/index.html
         # http://doc.trolltech.com/qq/qq19-buttons.html
 
-        
+
         # Catch click on the [X]: like clicking [Close]
         # CEBALERT: but what if this frame isn't in its own window!
         try:
@@ -2280,7 +2284,7 @@ class ParametersFrame(TkParameterized,T.Frame):
         buttons_frame = T.Frame(self,borderwidth=1,relief='sunken')
         self.buttons_frame = buttons_frame
         buttons_frame.pack(side="bottom",expand="no")
-        
+
         self._buttons_frame_left = T.Frame(buttons_frame)
         self._buttons_frame_left.pack(side='left',expand='yes',fill='x')
 
@@ -2324,12 +2328,12 @@ class ParametersFrame(TkParameterized,T.Frame):
 
         self.update_idletasks()
 
-        
+
     def _close_button(self):
         """See Close parameter."""
         if self.on_close:
             self.on_close()
-            
+
         T.Frame.destroy(self) # hmm
         self.master.destroy()
 
@@ -2346,21 +2350,21 @@ class ParametersFrame(TkParameterized,T.Frame):
             pass
 
         self.__dict__['_name_param_value'] = title
-        
-        
+
+
         ### Pack all of the non-hidden Parameters
         self.params_to_display = {}
         for n,p in parameterized_object.params().items():
             if not self.hidden_param(n):
                 self.params_to_display[n]=p
-                    
+
         self.pack_params_to_display()
 
         # hide Defaults button for classes
         if isinstance(parameterized_object,type):
             self.hide_param('Defaults')
         else:
-            self.unhide_param('Defaults')    
+            self.unhide_param('Defaults')
 
 
     def _wipe_currently_displayed_params(self):
@@ -2371,7 +2375,7 @@ class ParametersFrame(TkParameterized,T.Frame):
                     rep[w].destroy()
                 except: # e.g. buttons have None for label ('notNonelabel')
                     pass
-                
+
 
     def _grid_param(self,parameter_name,row):
         widget = self.representations[parameter_name]['widget']
@@ -2385,7 +2389,7 @@ class ParametersFrame(TkParameterized,T.Frame):
             # some params appear to have no docs!!!
             if help_text is not None:
                 help_text+="\n\nDefault: %s"%self._object2string(parameter_name,param_obj.default,replace=False)
-        
+
         if self.show_labels:
             label.grid(row=row,column=0,
                        padx=2,pady=2,sticky=T.E)
@@ -2420,7 +2424,7 @@ class ParametersFrame(TkParameterized,T.Frame):
                 except: #e.g. buttons have None for label ('notNonelabel')
                     pass
                 del self.representations[name][n]
-        
+
         widget,label = self._create_widget(name,self._params_frame,
                                            on_set=self.on_set,
                                            on_modify=self.on_modify)
@@ -2430,7 +2434,7 @@ class ParametersFrame(TkParameterized,T.Frame):
         self.representations[name]={'widget':widget,'label':label}
         self._indicate_tkvar_status(name)
 
-        
+
 
     def pack_params_to_display(self):
         self._wipe_currently_displayed_params()
@@ -2440,14 +2444,14 @@ class ParametersFrame(TkParameterized,T.Frame):
         for name,parameter in self.params_to_display.items():
             parameter_precedences[name]=parameter.precedence
         sorted_parameter_names = keys_sorted_by_value(parameter_precedences)
-            
+
         ### create the labels & widgets
         for name in self.params_to_display:
             self._make_representation(name)
-            
+
         ### add widgets & labels to screen in a grid
         rows = range(len(sorted_parameter_names))
-        for row,parameter_name in zip(rows,sorted_parameter_names): 
+        for row,parameter_name in zip(rows,sorted_parameter_names):
             self._grid_param(parameter_name,row)
 
         self.currently_displayed_params = dict([(param_name,self.representations[param_name])
@@ -2469,7 +2473,7 @@ class ParametersFrame(TkParameterized,T.Frame):
                 break
 
         # CEBALERT: should have used get_parameter_value(param_name)?
-        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get()) 
+        PO_to_edit = self._string2object(param_name,self._tkvars[param_name].get())
 
         parameter_window = AppWindow(self)
         parameter_window.title(PO_to_edit.name+' parameters')
@@ -2484,7 +2488,7 @@ class ParametersFrame(TkParameterized,T.Frame):
         t = type(self)
         if t.__name__=='EditingParametersFrameWithApply':
             t = ParametersFrameWithApply
-            
+
         parameter_frame = t(parameter_window,parameterized_object=PO_to_edit,msg_handler=self.msg_handler,on_set=self.on_set,on_modify=self.on_modify)
         parameter_frame.pack()
 
@@ -2495,7 +2499,7 @@ class ParametersFrame(TkParameterized,T.Frame):
 
         # CEBALERT: need to sort out all this stuff in the tkpo/pf
         # hierarchy
-        
+
 ##     def unpack_param(self,param_name):
 ##     def hide_param(self,param_name):
 ##     def unhide_param(self,param_name):
@@ -2503,7 +2507,7 @@ class ParametersFrame(TkParameterized,T.Frame):
     def repack_param(self,param_name):
 
         self._refresh_value(param_name)
-        
+
         r = self.representations[param_name]
         widget,label = r['widget'],r['label']
         row = int(widget.grid_info()['row'])
@@ -2512,10 +2516,10 @@ class ParametersFrame(TkParameterized,T.Frame):
         label.destroy()
 
         param = self.get_parameter_object(param_name)
-        
+
         self._create_translator(param_name,param)
         self._make_representation(param_name)
-        self._grid_param(param_name,row)            
+        self._grid_param(param_name,row)
 
     def _refresh_value(self,param_name):
         pass
@@ -2536,7 +2540,7 @@ class ParametersFrameWithApply(ParametersFrame):
     Apply = Button(doc="""Set object's Parameters to displayed values.\n
                           When editing a class, sets the class defaults
                           (i.e. acts on the class object).""")
-    
+
     def __init__(self,master,parameterized_object=None,
                  on_set=None,on_modify=None,**params):
         self._apply_hooks=[]
@@ -2549,8 +2553,8 @@ class ParametersFrameWithApply(ParametersFrame):
         ### CEBALERT: describe why this apply is different from Apply
         for p in self.param_immediately_apply_change:
             self.param_immediately_apply_change[p]=True
-            
-        
+
+
         self.pack_param('Apply',parent=self._buttons_frame_right,
                         on_set=self._apply_button,side='left')
 
@@ -2570,7 +2574,7 @@ class ParametersFrameWithApply(ParametersFrame):
 
     def set_PO(self,parameterized_object):
         super(ParametersFrameWithApply,self).set_PO(parameterized_object)
-                                          
+
         # (don't want to update parameters immediately)
         for v in self._tkvars.values():
             v._checking_get = v.get
@@ -2590,8 +2594,8 @@ class ParametersFrameWithApply(ParametersFrame):
             status = 'changed'
 
         super(ParametersFrameWithApply,self)._indicate_tkvar_status(param_name,status)
-        
-    
+
+
     def _handle_gui_set(self,p_name,force=False):
         #print "ParametersFrame._handle_gui_set",p_name
         TkParameterized._handle_gui_set(self,p_name,force)
@@ -2604,7 +2608,7 @@ class ParametersFrameWithApply(ParametersFrame):
                 state='disable'
 
             w.config(state=state)
-            
+
     def _close_button(self):
         # CEBERRORALERT: dialog box should include a cancel button
         # Also, changes are *not* applied if one of the boxes is in
@@ -2642,7 +2646,7 @@ class ParametersFrameWithApply(ParametersFrame):
         po_stringrep = self._object2string(param_name,po_val)
         self._tkvars[param_name]._original_set(po_stringrep)
 
-        
+
     def _refresh_button(self,overwrite_error=True):
         for name in self.params_to_display.keys():
             if self.translators[name].last_string2object_failed and not overwrite_error:
@@ -2686,7 +2690,7 @@ def edit_parameters(parameterized,with_apply=True,**params):
 # tips for some reason, but user code didn't have to change.
 
 class Balloon(T.Widget):
-    
+
     _tkname = '::tooltip::tooltip'
 
     def __init__(self,master,cnf={},**kw):
@@ -2696,12 +2700,12 @@ class Balloon(T.Widget):
     def bind(self,*args):
         """
         e.g. for a Button b and a Menu m with item 'Quit' in a T.Toplevel t
-        
+
         balloon = Balloon(t)
         balloon.bind(b,'some guidance')
         balloon.bind(m,'Quit','more guidance')
         """
-        if len(args)>2:            
+        if len(args)>2:
             self.tk.call(self._tkname,args[0]._w,'-index',args[1],args[2])
         else:
             self.tk.call(self._tkname,*args)
@@ -2725,7 +2729,7 @@ class Menu(T.Menu):
     no matter what the label might have become.
     """
     ## (Original Menu class is in lib/python2.4/lib-tk/Tkinter.py)
-    
+
     def get_tkinter_index(self,index):
         """
         Return the Tkinter index, whether given an indexname or index
@@ -2757,7 +2761,7 @@ class Menu(T.Menu):
                 if self.index(index)==i:
                     return name
         return None
-                
+
 
     def __init__(self, master=None, cnf={}, **kw):
         # Creates two internal indexes to track names and commands
@@ -2769,7 +2773,7 @@ class Menu(T.Menu):
     def __extract_indexname(self,cnf,kw):
         # indexname will be as specified by 'indexname' in cnf or kw,
         # or else as specified by 'label' in cnf or kw.
-        # 
+        #
         # indexname will be None if neither indexname nor label is
         # specified in cnf or kw.
         indexname=cnf.pop('indexname',kw.pop('indexname',None))
@@ -2795,7 +2799,7 @@ class Menu(T.Menu):
         assert indexname not in self.indexname2index
         T.Menu.add(self,itemType,cnf,**kw)
         self._update_indices(self.index("last") or 0,indexname,cnf,kw)
-        
+
 
     def insert(self, index, itemType, cnf={}, **kw):
         """
@@ -2827,13 +2831,13 @@ class Menu(T.Menu):
         self.named_commands.pop(indexname1,None)
         self.indexname2index.pop(indexname1,None)
         T.Menu.delete(self,i1,None)
-        
+
 
     def delete(self, index1, index2=None):
         """
         If index2 is not specified, deletes the menu item at index1
         (an indexname or tk integer index).
-        
+
         If index2 is specified, deletes menu items in
         range(index1,index2+1).
         """
@@ -2856,7 +2860,7 @@ class Menu(T.Menu):
         """Configure a menu item at INDEX."""
         i = self.get_tkinter_index(index)
         return T.Menu.entryconfigure(self,i,cnf,**kw)
-        
+
     entryconfig = entryconfigure
 
     def invoke(self, index):
@@ -2888,7 +2892,7 @@ class TaggedSlider(T.Frame):
 
         On pressing Return in or moving focus from the tag, the slider
         value is set, but also:
-        
+
         * the range of the slider is adjusted (e.g. to fit a larger
           max value)
 
@@ -2913,7 +2917,7 @@ class TaggedSlider(T.Frame):
         self.tag = T.Entry(self,textvariable=self.variable,
                                  width=tag_width,**tag_extra_config)
         self.tag.pack(side='left')
-        self.tag.bind('<Return>', self._tag_press_return)  
+        self.tag.bind('<Return>', self._tag_press_return)
         self.tag.bind('<FocusOut>', self._tag_focus_out)
         self.tag.bind('<Leave>', self._tag_focus_out)
 
@@ -2922,7 +2926,7 @@ class TaggedSlider(T.Frame):
                     from_=self.bounds[0],to=self.bounds[1],
                     orient='horizontal',length=slider_length,
                     showvalue=0,**slider_extra_config)
-        
+
         self.slider.pack(side='right',expand="yes",fill='x')
         self.slider.bind('<ButtonRelease-1>', self._slider_used)
         self.slider.bind('<B1-Motion>', self._slider_used)
@@ -2966,8 +2970,8 @@ class TaggedSlider(T.Frame):
         self.slider.config(from_=lower,to=upper)
 
     set_bounds = set_slider_bounds
-        
- 
+
+
     # CB: why isn't this used for [] access? What should this
     # be called? Is it configure?
     def config(self,**options):
@@ -3000,7 +3004,7 @@ class TaggedSlider(T.Frame):
                 either the component tag or slider instead.""")
 
         return {} # CEBALERT: need to return same object as Tkinter would.
-    
+
 
     def get(self):
         """
@@ -3028,7 +3032,7 @@ class TaggedSlider(T.Frame):
 
     def _tag_focus_out(self,event=None):
         self.event_generate("<<TagFocusOut>>")
-        self.tag_set()        
+        self.tag_set()
 
 
     def _set_slider_resolution(self,value):
@@ -3052,7 +3056,7 @@ class TaggedSlider(T.Frame):
         try:
             # 1st choice is to get the actual number in the box:
             # allows us to respect user-entered resolution
-            # (e.g. 0.010000) 
+            # (e.g. 0.010000)
             self._set_slider_resolution(self.tag.get())
             return True
         except: # probably tclerror
@@ -3102,7 +3106,7 @@ class FocusTakingButton(T.Button):
 class ScrolledFrame(T.Frame):
     """
     XXXX
-    
+
     Content to be scrolled should go in the 'content' frame.
     """
 
@@ -3111,17 +3115,17 @@ class ScrolledFrame(T.Frame):
     def _setstatus(self,s):
         self._status = s
     status = property(_getstatus,_setstatus)
-    
+
     def __init__(self,parent,**config):
         assert 'status' not in config
         T.Frame.__init__(self,parent,**config)
 
-        
+
         abovetopframe = T.Frame(self)
         topframe = T.Frame(self)
         middleframe = T.Frame(self)
         botframe = T.Frame(self)
-       
+
         botframe.pack(side="bottom",expand="yes",fill="x")
         abovetopframe.pack(side="top",expand="yes",fill="both")
         topframe.pack(side="top")#,expand="no",fill="both")
@@ -3133,31 +3137,31 @@ class ScrolledFrame(T.Frame):
         self.canvas = T.Canvas(topframe)
         self.canvas.pack()
         self.canvas.configure(width=0,height=0)
-        
+
         self.sc = Scrodget(topframe,autohide=1)
         self.sc.associate(self.canvas)
         self.sc.pack(expand=1,fill="both")
-        
+
         self.content = T.Frame(self.canvas)
         self.content.title = lambda x: self.title(x)
         self.content.container = self
-        
+
         self.canvas.create_window(0,0,window=self.content,anchor='nw')
 
         self.bind("<<SizeRight>>",self.sizeright)
 
-        #self.status = StatusBar(botframe) 
+        #self.status = StatusBar(botframe)
         #if status:
         #    self.status.pack(side="bottom",fill="both",expand="yes")
-            
+
 
     def sizeright(self,event=None):
         self.content.update_idletasks()
         W = self.content.winfo_width()
-        H = self.content.winfo_height()        
+        H = self.content.winfo_height()
         self.canvas.configure(scrollregion=(0, 0, W, H))
         self.canvas.configure(width=W,height=H)
-        
+
 
 
 class ScrolledWindow(T.Toplevel):
@@ -3172,10 +3176,10 @@ class ScrolledWindow(T.Toplevel):
         # way to have the (status) label request the right height but
         # make no request about the width.
         self.botframe = T.Frame(self,height=20)
-        
+
         self.botframe.pack(side='bottom',expand='no',fill='x')
         self.topframe.pack(side='top',expand='yes',fill='both')
-        
+
         self._scrolledframe = ScrolledFrame(self.topframe)
         self._scrolledframe.pack(expand=1,fill='both')
         self.content = self._scrolledframe.content
@@ -3214,7 +3218,7 @@ class ProgressController(object):
 
             self._close(final_message="Time %s: Finished %s"%(self.sim.timestr(),
                                                              self.timer.func.__name__))
-            
+
 
     def _close(self,final_message=None):
         self.timer.receive_info.remove(self.timing_info)
@@ -3226,7 +3230,7 @@ class ProgressController(object):
 
     def set_stop(self):
         """Declare that running should be interrupted."""
-        self.timer.stop=True        
+        self.timer.stop=True
         final_message = "Time %s: Interrupted %s"%(self.sim.timestr(),
                                                    self.timer.func.__name__)
         self._close(final_message)
@@ -3235,8 +3239,8 @@ class ProgressController(object):
 class ProgressWindow(ProgressController,T.Frame):
     """
     Graphically displays progress information for a SomeTimer object.
-    
-    ** Currently expects a 0-100 (percent) value ***        
+
+    ** Currently expects a 0-100 (percent) value ***
     """
     def __init__(self,parent,sim=None,timer=None,progress_var=None,
                  title=None,status=None,unpack_master_when_done=True):
@@ -3245,7 +3249,7 @@ class ProgressWindow(ProgressController,T.Frame):
         T.Frame.__init__(self,parent)
 
         self.balloon = Balloon(self)
-        
+
         self._unpack_master=unpack_master_when_done
 
 
@@ -3261,14 +3265,14 @@ class ProgressWindow(ProgressController,T.Frame):
         stop_button.pack(side='right')#side="bottom")
         self.balloon.bind(stop_button,"""Interrupt a procedure.""")
 #        Stop a running simulation.
-#            
+#
 #        The simulation can be interrupted only on round integer
 #        simulation times, e.g. at 3.0 or 4.0 but not 3.15.  This
 #        ensures that stopping and restarting are safe for any
 #        model set up to be in a consistent state at integer
 #        boundaries, as the example Topographica models are.""")
-            
-        
+
+
     def _close(self,final_message=None):
         ProgressController._close(self,final_message)
         # such a hack
@@ -3285,7 +3289,7 @@ class ProgressWindow(ProgressController,T.Frame):
             self.timeleft['text']=Z
 
             if self.status is not None:
-                self.status.response('Time: %s  Duration: %s'%(time,duration))  
+                self.status.response('Time: %s  Duration: %s'%(time,duration))
                 self.update()
                 self.update_idletasks()
         except T.TclError:
@@ -3307,11 +3311,11 @@ class ToolTip( T.Toplevel ):
     Provides a ToolTip widget for Tkinter.
     To apply a ToolTip to any Tkinter widget, simply pass the widget to the
     ToolTip constructor
-    """ 
+    """
     def __init__( self, wdgt, msg=None, msgFunc=None, delay=1, follow=True ):
         """
         Initialize the ToolTip
-        
+
         Arguments:
           wdgt: The widget this ToolTip is assigned to
           msg:  A static string message assigned to the ToolTip
@@ -3324,9 +3328,9 @@ class ToolTip( T.Toplevel ):
         T.Toplevel.__init__( self, self.parent, bg='black', padx=1, pady=1 )      # Initalise the Toplevel
         self.withdraw()                                                         # Hide initially
         self.overrideredirect( True )                                           # The ToolTip Toplevel should have no frame or title bar
-        
-        self.msgVar = T.StringVar()                                               # The msgVar will contain the text displayed by the ToolTip        
-        if msg == None:                                                         
+
+        self.msgVar = T.StringVar()                                               # The msgVar will contain the text displayed by the ToolTip
+        if msg == None:
             pass#self.msgVar.set( 'No message provided' )
         else:
             self.msgVar.set( msg )
@@ -3340,18 +3344,18 @@ class ToolTip( T.Toplevel ):
         self.wdgt.bind( '<Enter>', self.spawn, '+' )                            # Add bindings to the widget.  This will NOT override bindings that the widget already has
         self.wdgt.bind( '<Leave>', self.hide, '+' )
         self.wdgt.bind( '<Motion>', self.move, '+' )
-        
+
     def spawn( self, event=None ):
         """
         Spawn the ToolTip.  This simply makes the ToolTip eligible for display.
         Usually this is caused by entering the widget
-        
+
         Arguments:
           event: The event that called this funciton
         """
         self.visible = 1
         self.after( int( self.delay * 1000 ), self.show )                       # The after function takes a time argument in miliseconds
-        
+
     def show( self ):
         """
         Displays the ToolTip if the time delay has been long enough
@@ -3360,11 +3364,11 @@ class ToolTip( T.Toplevel ):
             self.visible = 2
         if self.visible == 2 and self.msgVar.get()!='':
             self.deiconify()
-            
+
     def move( self, event ):
         """
         Processes motion within the widget.
-        
+
         Arguments:
           event: The event that called this function
         """
@@ -3378,11 +3382,11 @@ class ToolTip( T.Toplevel ):
         except:
             pass
         self.after( int( self.delay * 1000 ), self.show )
-            
+
     def hide( self, event=None ):
         """
         Hides the ToolTip.  Usually this is caused by leaving the widget
-        
+
         Arguments:
           event: The event that called this function
         """
@@ -3397,7 +3401,7 @@ def bind_tooltip(widget,msg):
     else:
         kw['msg']=msg
     ToolTip(widget,**kw)
-        
+
 
 class StatusBar(T.Frame):
 
@@ -3435,7 +3439,7 @@ class StatusBar(T.Frame):
         self.pf0 = T.Frame(self)
         self.pf0.pack(side='right')
         self.progressframe=T.Frame(self.pf0)
-        
+
         self.dynamicinfoframe=T.Frame(self)
         self.dynamicinfolabel=T.Label(self.dynamicinfoframe,anchor='w')
         self.dynamicinfolabel.pack(side='left')
@@ -3469,8 +3473,8 @@ class StatusBar(T.Frame):
 
     def open_progress_window(self,timer=None,sim=None):
         p = ProgressWindow(self.progressframe,sim=sim,timer=timer,status=self)
-        p.pack() 
-        self.progressframe.pack(self.progressframe_pack_options)       
+        p.pack()
+        self.progressframe.pack(self.progressframe_pack_options)
         return p
 
 
@@ -3478,13 +3482,13 @@ class StatusBar(T.Frame):
         self.dynamicinfoframe.pack_forget()
         self.messageframe.pack(**self.messageframe_pack_options)
 
-        
+
     def _show_dynamicinfoframe(self):
         self.messageframe.pack_forget()
         self.dynamicinfoframe.pack(**self.dynamicinfoframe_pack_options)
         self.update_idletasks()
 
-        
+
     def dynamicinfo(self,text):
         self.dynamicinfolabel.config(text=text)
 
@@ -3497,7 +3501,7 @@ class StatusBar(T.Frame):
             self.after_cancel(self.__last_after_id)
         except:
             pass
-        
+
         self.__last_after_id = self.after(10000,lambda *args: self.clear_dynamicinfo())
 
     def _display_from_history(self):
@@ -3507,8 +3511,8 @@ class StatusBar(T.Frame):
             self._display_message("%s: %s"%(displayindex,self.mstack[self.mpoint]))
         else:
             self._display_message(self.mstack[self.mpoint])
-        
-    
+
+
     def previous_message(self):
         self.mpoint=max(-len(self.mstack),self.mpoint-1)
         self._display_from_history()
@@ -3523,7 +3527,7 @@ class StatusBar(T.Frame):
         self.msformat.append(self._nrm_fmt)
         self._display_message(text)
 
-        
+
     def _display_message(self,text):
         if text!='':
             if len(self.mstack)>1:
@@ -3533,7 +3537,7 @@ class StatusBar(T.Frame):
             self.messagelabel.config(text=text)
             self._show_messageframe()
 
-            
+
     def warn(self,text):
         self._wrn_fmt()
         self.mstack.append(text)
@@ -3564,7 +3568,7 @@ class StatusBar(T.Frame):
 #            self.grab_release()
 #        except:
 #            pass
-        
+
     def clear_dynamicinfo(self):
         self.dynamicinfolabel.config(text="")
 
@@ -3573,14 +3577,14 @@ class StatusBar(T.Frame):
     def _get_dynamicinfo(self):
         return self.dynamicinfolabel.config()['text'][4]
 
-        
+
 
 # CEBALERT: rename
 class AppWindow(ScrolledWindow):
     """
     A ScrolledWindow with extra features intended to be common to all
     windows of an application.
-    
+
     Currently this only includes a window icon, but we intend to
     add a right-click menu and possibly more.
     """
@@ -3598,7 +3602,7 @@ class AppWindow(ScrolledWindow):
         # status bar is currenlty inside scrolled area (a feature
         # request is to move it outside ie replace self.content with
         # just self)
-        self.status = StatusBar(self.botframe) 
+        self.status = StatusBar(self.botframe)
         if status:
             # place doesn't interfere with parent's geometry
             # (don't want status bar to cause horizontal resizing,
@@ -3618,7 +3622,7 @@ class AppWindow(ScrolledWindow):
 
     def mydestroy(self):
         ScrolledWindow.destroy(self)
-        
+
 
 
 class ListWidget(T.Frame):
@@ -3634,7 +3638,7 @@ class ListWidget(T.Frame):
             self.disabled=widget_options['state']
         else:
             self.disabled=False
-            
+
         self.entry=T.Entry(self,textvariable=variable,state='disabled',disabledforeground='black') #CEBALERT: presumably disabledforeground won't work work with styles...
         self.entry.pack(fill='both',expand=1)
 
@@ -3644,7 +3648,7 @@ class ListWidget(T.Frame):
         # activate!  It must be overwritten or something by tk. So I
         # have to duplicate the right-click menu code here.
         self.entry.bind("<<right-click>>",self._right_click)
-        master.option_add("*Menu.tearOff", "0") 
+        master.option_add("*Menu.tearOff", "0")
         self.menu = Menu(master)
         self.menu.insert_command('end',label='Properties',
             command=cmd)
@@ -3694,11 +3698,11 @@ def list_to_parameterized(list_,class_=None):
     else:
         parameter_objs = dict([(name,ClassSelector(class_=class_,default=value))
                                for name,value in parameter_values.items()])
-        
+
 
     new_class = new.classobj('List',(ListRepresenter,),parameter_objs)
     #new_class.params('name').hidden=True
-    
+
     inst = new_class(parameter_values,class_=class_)
     inst.list_ = list_ # that's a hack; need to get classes right
     return inst
@@ -3707,7 +3711,7 @@ def list_to_parameterized(list_,class_=None):
 
 
 
-############################################################    
+############################################################
 
 def standard_parameterized_params():
     return Parameterized.params().keys()
@@ -3716,7 +3720,7 @@ def standard_parameterized_params():
 class Representer(Parameterized):
 
     name = Parameter(precedence=-1) # CEBALERT
-    
+
     def __init__(self,represented,class_):
         ## CEBALERT: when we come to represent dicts in the GUI,
         ## will have to deal with name clashes (e.g. for name parameter)
@@ -3739,7 +3743,7 @@ class Representer(Parameterized):
                 param_names.pop(param_names.index(name))
 
         return param_names
-        
+
 
     def update(self):
         for name in self.my_params():
@@ -3750,24 +3754,24 @@ class Representer(Parameterized):
             p = Parameter(default=None)
         else:
             p = ClassSelector(class_=self.class_,default=None)
-            
+
         self._add_parameter(name,p)
         self.represented[name]=p.default
         return name
-        
+
     def remove(self,name):
         # CB: don't move any of this method up to parameterized
         # without considering the consequences!
 
         del self.represented[name]
-        
+
         cls=type(self)
         delattr(cls,name)
         try:
-            delattr(cls,'_%s__params'%cls.__name__) 
+            delattr(cls,'_%s__params'%cls.__name__)
         except AttributeError:
             pass
-        
+
 
 class ListRepresenter(Representer):
 
@@ -3796,7 +3800,7 @@ class ListRepresenter(Representer):
             longest = max([len(n) for n in self.my_params()])
         except ValueError:
             longest = 0
-        
+
         if name is None:
             name = 'a'*(longest+1)
             #name = 'a'*(len(self.my_params())+1)
@@ -3849,7 +3853,7 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
 # CEBALERT: name this, and there's duplication with represented etc.
     def xupdate(self):
         cls = type(self._extraPO)
-        
+
         old = {}
         for name in self.params_to_display:
             old[name]=(self._tkvars[name],
@@ -3858,12 +3862,12 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
                        self.currently_displayed_params[name],
                        self._extraPO.params(name))
 
-        new_pos = {} 
+        new_pos = {}
         for name in self.params_to_display.keys():
             new_pos[int(self.representations[name]['widget'].grid_info()['row'])]=name
 
         self._extraPO.represented = OrderedDict()
-        
+
         for name,pos in zip(sorted(self.params_to_display),range(len(self.params_to_display))):
             self._tkvars[name]=old[new_pos[pos]][0]
 
@@ -3876,7 +3880,7 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
                     w.destroy()
                 except:
                     pass
-                    
+
             self.representations[name]=old[new_pos[pos]][1]
             self.params_to_display[name]=old[new_pos[pos]][2]
             self.currently_displayed_params[name]=old[new_pos[pos]][3]
@@ -3887,13 +3891,13 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
 
         ## delete cached params()
         try:
-            delattr(cls,'_%s__params'%cls.__name__) 
+            delattr(cls,'_%s__params'%cls.__name__)
         except AttributeError:
             pass
 
         self._extraPO.update()
         self.set_PO(self._extraPO) # HACK! At least extract relevant parts
-        
+
 
     def _grid_param(self,parameter_name,row):
         super(EditingParametersFrameWithApply,self)._grid_param(
@@ -3927,7 +3931,7 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
         self.currently_displayed_params[name]=self.representations[name]
 
         self._update_apply_status()
-        
+
 
     def _del_param(self,name):
         current_pos = int(self.representations[name]['widget'].grid_info()['row'])
@@ -3938,13 +3942,13 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
                 self.representations[name][w].destroy()
             except:
                 pass
-            
+
         del self._tkvars[name]
         del self.representations[name]
         del self.params_to_display[name]
         del self.currently_displayed_params[name]
         del self.translators[name]
-        
+
         po.remove(name)
 
         # move ones below up one
@@ -3957,11 +3961,11 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
                         if r1>current_pos:
                             w_gi['row']='%s'%(r1-1)
                             w.grid(**w_gi)
-                        
+
         self._update_apply_status()
 
 
-        
+
     def _down_param(self,name):
         current_pos = int(self.representations[name]['widget'].grid_info()['row'])
 
@@ -3999,7 +4003,7 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
                 g = w.grid_info()
                 if 'row' in g:
                     #print "regrid",new_name,new_pos
-                    g['row']='%s'%current_pos 
+                    g['row']='%s'%current_pos
                     w.grid(**g)
 
         self._update_apply_status()
@@ -4023,7 +4027,7 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
             w.config(state='normal')
         else:
             w.config(state='disabled')
-            
+
     def set_PO(self,parameterized_object):
         super(EditingParametersFrameWithApply,self).set_PO(parameterized_object)
         self.hide_param('Defaults') # CEBALERT: should just have been unpacked earlier
@@ -4033,23 +4037,23 @@ class EditingParametersFrameWithApply(ParametersFrameWithApply):
         if len(self._extraPO.list_)!=len(self.params_to_display):
             return True
 
-        # detect order change 
+        # detect order change
         names = sorted(self.params_to_display.keys())
         for i,name in zip(range(len(names)),names):
             if 'widget' not in self.representations[name] or int(self.representations[name]['widget'].grid_info()['row'])!=i:
                 return True
-            
+
         return super(EditingParametersFrameWithApply,self).has_unapplied_change()
-        
+
 
     def _refresh_button(self,overwrite_error=True):
         self.set_PO(self._extraPO)
         self._update_apply_status()
 
-    # CEBALERT: because 
+    # CEBALERT: because
     def _apply_button(self):
         self.update_parameters()
-        
+
         for h in self._apply_hooks:
             h(self)
 
@@ -4085,5 +4089,5 @@ class ListItemCtrlWidget(T.Frame):
         remove['image']=image
         self._hack.append(image)
         ###
-    
+
 
