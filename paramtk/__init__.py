@@ -184,11 +184,8 @@ from inspect import getdoc
 
 from tkMessageBox import _show,QUESTION,YESNO
 
-import param.parameterized
 from param.parameterized import Parameterized,ParameterizedMetaclass,\
      classlist
-
-import param
 
 # CEBALERT: try to import from python 2.7's ttk first
 from tilewrapper import Combobox,Progressbar
