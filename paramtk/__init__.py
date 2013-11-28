@@ -177,7 +177,7 @@ import Tkinter as T
 try:
     import Image, ImageOps, ImageTk
 except ImportError:
-    from PIL import Image, ImageOps, ImageTk
+    from PIL import Image, ImageOps, ImageTk # pyflakes:ignore (try/except import)
 
 
 from inspect import getdoc
