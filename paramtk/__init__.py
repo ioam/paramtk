@@ -2014,6 +2014,7 @@ class ListTranslator(Translator):
         super(ListTranslator,self).__init__(param)
         self.list_=initial_value
 
+    #JABALERT: Shouldn't this be building a new list out of the string?
     def string2object(self,string_):
         return self.list_
 
@@ -2061,7 +2062,8 @@ class Eval_ReprTranslator(Translator):
         if object_==self.last_object:
             return self.last_string
         else:
-            string_=script_repr(object_,[],"",[]).replace("\n","")
+            repr=script_repr(object_,[],"",[])
+            string_=repr.replace("\n","") if repr is not None else "None"
             self.last_object = object_
             self.last_string = string_
             return string_
